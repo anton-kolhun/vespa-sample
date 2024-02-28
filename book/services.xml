@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services version="1.0">
+
+
+ <container id="container" version="1.0">
+    <search></search>
+    <document-processing></document-processing>
+    <document-api></document-api>
+  </container>
+
+ <content id="content" version="1.0">
+    <redundancy>1</redundancy>
+    <documents>
+      <document type="book" mode="index"></document>
+      <document-processing cluster="container"></document-processing>
+
+    </documents>
+    <nodes>
+      <node distribution-key="0" hostalias="node1"></node>
+    </nodes>
+  </content>
+</services>

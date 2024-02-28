@@ -1,0 +1,42 @@
+search book {
+    document book {
+
+      field id type string {
+            indexing: summary | attribute
+        }
+
+        field title type string {
+            indexing: summary | index
+        }
+
+        field author type string {
+            indexing: summary | attribute
+            rank: filter
+        }
+
+
+        field description type string {
+            indexing: summary | index
+        }
+
+        field tags type array<string> {
+            indexing: summary | index
+            match: text
+        }
+
+        field year type long {
+            indexing: summary | attribute
+            rank: filter
+        }
+    }
+
+    document-summary base_summary {
+        summary id type string {}
+        summary title type string {}
+        summary author type string {}
+        summary description type string {}
+        summary tags type array<string> {}
+        summary year type long {}
+    }
+
+}
