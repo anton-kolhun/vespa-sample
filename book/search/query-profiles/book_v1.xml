@@ -4,7 +4,7 @@
     <field name="maxOffset">100</field>
     <field name="hits">10</field>
     <field name="presentation.summary">base_summary</field>
-    <field name="ranking.profile">default</field>
+    <field name="ranking.profile">custom</field>
 
     <field name="yql">select * from book where
       (        

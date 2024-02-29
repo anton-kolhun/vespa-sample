@@ -39,4 +39,25 @@ search book {
         summary year type long {}
     }
 
+    rank-profile custom inherits default {
+
+        rank-properties {
+            query(title): 0.5
+            query(tags): 0.25
+            query(description): 0.25
+        }
+
+        function textMatchScore () {
+            expression {
+                query(title) * nativeFieldMatch(title) + query(tags) * nativeFieldMatch(tags) + query(description) * nativeFieldMatch(description) 
+            }
+        }
+
+        first-phase {
+            expression: textMatchScore
+            rank-score-drop-limit: 0.01
+        }
+
+    }
+
 }
