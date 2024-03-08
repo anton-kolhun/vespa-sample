@@ -4,13 +4,14 @@
     <field name="maxOffset">100</field>
     <field name="hits">10</field>
     <field name="presentation.summary">base_summary</field>
-    <field name="ranking.profile">custom</field>
+    <field name="ranking.profile">default</field>
 
     <field name="yql">select * from book where
       (        
         ([{"defaultIndex": "title","grammar": "any","stem": true,"allowEmpty": true, "usePositionData": true}]userInput(@search_term)) OR
         ([{"defaultIndex": "description","grammar": "any","stem": true,"allowEmpty": true, "usePositionData": true}]userInput(@search_term)) OR
-        ([{"defaultIndex": "tags","grammar": "any","stem": true,"allowEmpty": true, "usePositionData": true}]userInput(@search_term))
+        ([{"defaultIndex": "tags","grammar": "any","stem": true,"allowEmpty": true, "usePositionData": true}]userInput(@search_term)) OR
+        ([{"defaultIndex": "ngram","grammar": "any","stem": true,"allowEmpty": true, "usePositionData": true}]userInput(@search_term))
       )
     %{query_filter}
     </field>

@@ -30,6 +30,23 @@ search book {
         }
     }
 
+    field ngram type string {
+        indexing {
+            # Initialize variables
+            "" | set_var tags_var | set_var description_var | set_var title_var;
+
+            select_input {tags: (input tags | join " ") | set_var tags_var;};
+            select_input {description: input description | set_var description_var;};
+            select_input {title: input title | set_var title_var;};
+
+            get_var tags_var . " " . (get_var description_var) . " " . (get_var title_var)  | index
+        }
+        match {
+            gram
+            gram-size: 2
+        }
+    }
+
     document-summary base_summary {
         summary id type string {}
         summary title type string {}
@@ -45,6 +62,10 @@ search book {
             query(title): 0.5
             query(tags): 0.25
             query(description): 0.25
+
+            query(ngram_match_weight): 0.2
+            query(text_match_weight) : 0.8
+
         }
 
         function textMatchScore () {
@@ -53,8 +74,12 @@ search book {
             }
         }
 
+        function ngramMatchScore () {
+           expression: fieldMatch(ngram)
+         }
+
         first-phase {
-            expression: textMatchScore
+            expression: textMatchScore * query(ngram_match_weight)  + ngramMatchScore * query(ngram_match_weight)
             rank-score-drop-limit: 0.01
         }
 
