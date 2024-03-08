@@ -17,4 +17,5 @@
     </field>
 
     <field name="timeout">2s</field>
+    <field name="rules.off">false</field>
 </query-profile>

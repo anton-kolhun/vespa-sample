@@ -1,0 +1,8 @@
+@default
+
+# Stopwords: replace them by nothing
+title:[stopword] -> ;
+description:[stopword] -> ;
+tags:[stopword] -> ;
+ngram:[stopword] -> ;
+[stopword] :- a,am,an,and,are,as,at,be,because,been,but,by,can,com,could,did,do,does,for,from,had,has,have,he,her,him,his,how,i,if,in,is,it,its,me,my,no,not,of,on,or,our,she,should,so,some,someone,than,that,the,their,them,then,there,these,they,this,through,to,too,us,was,way,we,were,what,when,where,which,who,why,will,with,would,www,you,your,can t,doesn t,how s,it s,that s,there s,what s,when s;
