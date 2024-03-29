@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query-profile id="book_ann_v1">
+    <field name="maxHits">100</field>
+    <field name="maxOffset">100</field>
+    <field name="hits">10</field>
+    <field name="ranking.profile">ann</field>
+
+    <field name="yql">select * from book where
+        ({"targetHits": 100, "label": "nns"}nearestNeighbor(emb_field, embedding))
+    </field>
+
+    <field name="ranking.features.query(embedding)">embed(e5, "%{search_term}")</field>
+    <field name="search_term"></field>
+    <field name="timeout">2s</field>
+    <field name="rules.off">false</field>
+</query-profile>

@@ -47,6 +47,20 @@ search book {
         }
     }
 
+
+    field emb_field type tensor<float>(x[384]) {
+        indexing {
+            # Initialize variables
+            "" | set_var tags_var | set_var description_var | set_var title_var;
+
+            select_input {tags: (input tags | join " ") | set_var tags_var;};
+            select_input {description: input description | set_var description_var;};
+            select_input {title: input title | set_var title_var;};
+
+           "passage: " . (get_var tags_var) . " " . (get_var description_var) . " " . (get_var title_var)  | embed e5 | attribute | index
+        }
+    }
+
     document-summary base_summary {
         summary id type string {}
         summary title type string {}
@@ -83,6 +97,20 @@ search book {
             rank-score-drop-limit: 0.01
         }
 
+    }
+
+    rank-profile ann inherits default {
+        inputs {
+            query(embedding) tensor<float>(x[384])
+        }
+
+        function annMatchScore () {
+            expression: closeness(label,nns)
+        }
+
+        first-phase {
+            expression: annMatchScore
+        }
     }
 
 }
