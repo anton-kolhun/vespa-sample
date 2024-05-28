@@ -7,9 +7,10 @@
 
     <field name="yql">select * from book where
         ({"targetHits": 100, "label": "nns"}nearestNeighbor(emb_field, embedding))
+        %{query_filter}
     </field>
 
-    <field name="ranking.features.query(embedding)">embed(e5, "%{search_term}")</field>
+    <field name="ranking.features.query(embedding)">embed(e5, "query: %{search_term}")</field>
     <field name="search_term"></field>
     <field name="timeout">2s</field>
     <field name="rules.off">false</field>
