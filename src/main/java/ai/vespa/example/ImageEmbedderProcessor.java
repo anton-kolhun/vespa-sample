@@ -99,7 +99,7 @@ public class ImageEmbedderProcessor extends DocumentProcessor {
                 .build();
         String result = httpClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
         Tensor tensor = Tensor.from("tensor<float>(d0[1],d1[3], d2[224], d3[224])", result);
-        Tensor embedding = modelsEvaluator.evaluatorOf(config.modelName()).bind("input_t", tensor).evaluate();
+        Tensor embedding = modelsEvaluator.evaluatorOf(config.modelName()).bind("input", tensor).evaluate();
         embedding = Util.slice(embedding, "d0:0").rename("d1", "x").l2Normalize("x");
         return embedding;
     }
