@@ -1,0 +1,4 @@
+package=edu.component
+
+modelName string
+rankFeatureParam string

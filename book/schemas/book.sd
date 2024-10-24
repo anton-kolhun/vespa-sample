@@ -28,6 +28,23 @@ search book {
             indexing: summary | attribute
             rank: filter
         }
+
+        field image_url type string {
+            indexing:  summary
+        }
+
+        field vit_b_32_image type tensor<float>(x[512]) {
+            indexing: attribute | index | summary
+            attribute {
+                distance-metric: euclidean
+            }
+            index {
+                hnsw {
+                    max-links-per-node: 16
+                    neighbors-to-explore-at-insert: 200
+                }
+            }
+        }
     }
 
     field ngram type string {
@@ -68,6 +85,7 @@ search book {
         summary description type string {}
         summary tags type array<string> {}
         summary year type long {}
+        summary vit_b_32_image type tensor<float>(x[512]) {}
     }
 
     rank-profile custom inherits default {
@@ -112,5 +130,16 @@ search book {
             expression: annMatchScore
         }
     }
+
+
+      rank-profile vit_b_32_similarity inherits default {
+        inputs {
+          query(vit_b_32_text) tensor<float>(x[512])
+        }
+
+        first-phase {
+          expression: closeness(label, nns)
+        }
+      }
 
 }

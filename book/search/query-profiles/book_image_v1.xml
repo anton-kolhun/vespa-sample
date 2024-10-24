@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<query-profile id="book_image_v1">
+    <field name="maxHits">100</field>
+    <field name="maxOffset">100</field>
+    <field name="hits">10</field>
+    <field name="ranking.profile">vit_b_32_similarity</field>
+    <field name="text_embedding_enabled">true</field>
+
+    <field name="yql">select * from book where
+        ({"targetHits": 100, "label": "nns"}nearestNeighbor(vit_b_32_image, vit_b_32_text))
+        %{query_filter}
+    </field>
+
+    <field name="timeout">2s</field>
+    <field name="rules.off">false</field>
+</query-profile>

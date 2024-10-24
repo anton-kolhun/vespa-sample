@@ -1,0 +1,4 @@
+package=edu.component
+
+vocabulary path
+contextlength int default=77

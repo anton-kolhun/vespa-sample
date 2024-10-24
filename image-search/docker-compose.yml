@@ -1,0 +1,15 @@
+version: '3.1'
+services:
+  math-engine:
+    build: ./math-engine
+    image: math-engine
+    ports:
+      - 8001:8001
+  vespa:
+    image: vespaengine/vespa:8.340.17
+    ports:
+      - 8080:8080
+      - 19071:19071
+      - 5005:5005
+    environment:
+      - MATH_ENGINE_URL=http://math-engine:8001/transform_to_tensor

@@ -1,0 +1,6 @@
+<validation-overrides>
+    <allow until='2024-04-10' comment="Remove index">content-type-removal</allow>
+    <allow until='2024-04-10'>indexing-change</allow>
+    <allow until='2024-04-10'>field-type-change</allow>
+    <allow until='2024-04-10'>indexing-mode-change</allow>
+</validation-overrides>
