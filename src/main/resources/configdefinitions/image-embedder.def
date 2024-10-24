@@ -1,0 +1,4 @@
+package=ai.vespa.example
+
+modelName string
+schemaToFieldsCfg{} string

@@ -2,28 +2,62 @@
 <services version="1.0">
 
 
- <container id="container" version="1.0">
-    <search>
-    </search>
-    <document-processing></document-processing>
-    <document-api></document-api>
+    <container id="container" version="1.0">
+        <model-evaluation/>
+        <search>
+            <chain id='default' inherits='vespa'>
+                <searcher id='ai.vespa.example.TextEmbeddingSearcher' bundle="text-image-search">
+                    <config name="ai.vespa.example.text-embedder">
+                        <modelName>clip_text_vit_b_32_v1</modelName>
+                        <rankFeatureParam>query(vit_b_32_text)</rankFeatureParam>
+                    </config>
+                </searcher>
+            </chain>
+        </search>
+        <document-processing>
+            <chain id="document-processing-chain" inherits="indexing">
+                <documentprocessor
+                        id="ai.vespa.example.ImageEmbedderProcessor"
+                        bundle="text-image-search">
+                    <config name="ai.vespa.example.image-embedder">
+                        <modelName>clip_image_vit_b_32_v1</modelName>
+                        <schemaToFieldsCfg>
+                            <item key="book">image_url,vit_b_32_image</item>
+                        </schemaToFieldsCfg>
+                    </config>
+                </documentprocessor>
+            </chain>
+        </document-processing>
+        <document-api></document-api>
 
-     <component id="e5" type="hugging-face-embedder">
-         <transformer-model path="model/e5-small-v2-int8.onnx"/>
-         <tokenizer-model path="model/tokenizer.json"/>
-     </component>
+        <!-- Configure the tokenizer -->
+        <component id="ai.vespa.example.BPETokenizer" bundle="text-image-search">
+            <config name="ai.vespa.example.bpe-tokenizer">
+                <contextlength>77</contextlength>
+                <vocabulary>files/bpe_simple_vocab_16e6.txt.gz</vocabulary>
+            </config>
+        </component>
 
-  </container>
+        <component id="e5" type="hugging-face-embedder">
+            <transformer-model path="model/e5-small-v2-int8.onnx"/>
+            <tokenizer-model path="model/tokenizer.json"/>
+        </component>
 
- <content id="content" version="1.0">
-    <redundancy>1</redundancy>
-    <documents>
-      <document type="book" mode="index"></document>
-      <document-processing cluster="container"></document-processing>
+        <nodes>
+            <jvm options="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"/>
+            <node hostalias="node1"/>
+        </nodes>
+    </container>
 
-    </documents>
-    <nodes>
-      <node distribution-key="0" hostalias="node1"></node>
-    </nodes>
-  </content>
+    <content id="content" version="1.0">
+        <redundancy>1</redundancy>
+        <documents>
+            <document type="book" mode="index"></document>
+            <document-processing cluster="container" chain="document-processing-chain"/>
+
+        </documents>
+        <nodes>
+            <node distribution-key="0" hostalias="node1"></node>
+        </nodes>
+    </content>
 </services>
