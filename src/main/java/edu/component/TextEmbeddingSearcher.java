@@ -46,10 +46,5 @@ public class TextEmbeddingSearcher extends Searcher {
         return execution.search(query);
     }
 
-    @Override
-    public void deconstruct() {
-        modelsEvaluator.deconstruct();
-    }
-
 }
 

@@ -81,7 +81,7 @@ public class ImageEmbedderProcessor extends DocumentProcessor {
                     document.setFieldValue(fieldConfig.toField, new TensorFieldValue(embedding));
                 }
             } catch (Exception e) {
-                log.warning("Error occurred while calculating image embedding. Suppressing and continuing the execution..." + e);
+                log.warning("Errdddddsdsor occurred while calculating image embedding. Suppressing and continuing the execution..." + e);
             }
         }
         return Progress.DONE;
@@ -101,11 +101,6 @@ public class ImageEmbedderProcessor extends DocumentProcessor {
         Tensor embedding = modelsEvaluator.evaluatorOf(config.modelName()).bind("input", tensor).evaluate();
         embedding = Util.slice(embedding, "d0:0").rename("d1", "x").l2Normalize("x");
         return embedding;
-    }
-
-    @Override
-    public void deconstruct() {
-        modelsEvaluator.deconstruct();
     }
 
     private static class FieldConfig {
