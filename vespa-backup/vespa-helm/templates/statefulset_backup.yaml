@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vespa-backup
+  labels:
+    app: vespa-backup
+spec:
+  selector:
+    matchLabels:
+      app: vespa-backup
+  serviceName: vespa-backup
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: vespa-backup
+    spec:
+      containers:
+        - name: vespa-backup
+          image: {{ .Values.backup.image.repository }}:{{ .Values.backup.image.tag }}
+          imagePullPolicy: {{ .Values.backup.image.pullPolicy }}
+          env:
+            - name: VESPA_CONFIGSERVERS
+              value: "vespa-0.vespa.{{ .Release.Namespace }}.svc.cluster.local,vespa-1.vespa.{{ .Release.Namespace }}.svc.cluster.local,vespa-2.vespa.{{ .Release.Namespace }}.svc.cluster.local"
+            - name: VESPA_IGNORE_NOT_ENOUGH_MEMORY
+              value: "true"
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .Values.backup.aws.accessKeyId | quote }}
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .Values.backup.aws.secretAccessKey | quote }}
+            - name: VESPA_BACKUP_S3_BUCKET
+              value: "s3://ak-static-content"
+          resources:
+            {{- toYaml .Values.backup.resources | nindent 12 }}

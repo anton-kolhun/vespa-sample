@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: vespa
+  labels:
+    app: vespa
+spec:
+  selector:
+    matchLabels:
+      app: vespa
+  serviceName: vespa
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: vespa
+    spec:
+      containers:
+        - name: vespa
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: VESPA_CONFIGSERVERS
+              value: "vespa-0.vespa.{{ .Release.Namespace }}.svc.cluster.local,vespa-1.vespa.{{ .Release.Namespace }}.svc.cluster.local,vespa-2.vespa.{{ .Release.Namespace }}.svc.cluster.local"
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.httpPort }}
+            - name: config
+              containerPort: {{ .Values.service.configPort }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

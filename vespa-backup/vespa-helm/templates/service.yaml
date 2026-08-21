@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vespa
+  labels:
+    app: vespa
+spec:
+  clusterIP: None
+  selector:
+    app: vespa
+  ports:
+    - name: http
+      port: {{ .Values.service.httpPort }}
+      targetPort: http
+    - name: config
+      port: {{ .Values.service.configPort }}
+      targetPort: config

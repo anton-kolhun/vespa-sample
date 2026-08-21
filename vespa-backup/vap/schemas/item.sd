@@ -1,0 +1,7 @@
+schema item {
+    document item {
+        field title type string {
+            indexing: index | summary
+        }
+    }
+}

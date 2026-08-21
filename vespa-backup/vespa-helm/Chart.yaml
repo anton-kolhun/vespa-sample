@@ -1,0 +1,6 @@
+apiVersion: v2
+name: vespa
+description: Vespa cluster with 3 combined nodes (config + feeder + searcher)
+type: application
+version: 0.1.0
+appVersion: "8.738.17"
