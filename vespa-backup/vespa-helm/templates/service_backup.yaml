@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vespa-backup
+  labels:
+    app: vespa-backup
+spec:
+  clusterIP: None
+  selector:
+    app: vespa-backup
